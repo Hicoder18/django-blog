@@ -1,0 +1,8 @@
+{% extends "essay/base.html" %}
+
+{% block content %}
+<div class="center">
+<p>该文章不是由您发表，您无权更改。</p> 
+
+<p>您可<a href="{% url 'essay:new_essay' cate.id %}">发表您的新文章</a></p></div>
+{% endblock content %}

@@ -1,0 +1,103 @@
+{% load bootstrap4 %}
+{% load static %}
+<!DOCTYPE html>
+<html lang='zh-CN'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='referrer' content='always'>
+    <meta name='author' content='随心而码'>
+    <meta name='robots' content='none'>
+    <meta name='keywords' content=''>
+    <meta name='description' content=''>
+    <meta name='renderer' content='webkit'>
+    <meta name='revisit-after' content='7 days'>
+    <meta http-equiv=window-target Content=_top>
+    <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no' viewport-fit=cover />
+    <title>程序员博客</title>
+    {% bootstrap_css %}
+    {% bootstrap_javascript jquery='full' %}
+    
+    <link rel="stylesheet" href="{% static 'essay/code.css' %}">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md navbar-light bg-light mb-5 border fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'essay:index'%}"><strong>程序员博客</strong> </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <!-- 添加分类到导航栏 -->
+                    <!-- <a href="{% url 'essay:category'%}">文章分类</a> -->
+                    {% for cate in categories %}
+                    <li class="nav-item"><a class="navbar-brand nav-link"
+                            href="{% url 'essay:cate' cate.id %}">{{cate.name}}</a>
+                    </li>{% endfor %}
+                </ul>
+                <!-- 搜索 -->
+                <ul class="navbar-nav ml-auto">
+                    <form class="form-inline" action="{% url 'essay:search' %}" method="get">
+                        <input class="form-control mr-sm-2" type="search" name="search" placeholder="搜索"
+                            aria-label="Search">
+                    </form>
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    <!-- 登录与注销 -->
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <span class="navbar-text">你好，<a href="{% url 'users:my_account' user.id %}">
+                            {{ user.first_name }}</a></span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'users:logout' %}">注销</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'users:register' %}">注册</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'users:login'%}">登录</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <main class="container mt-5 mb-5 pt-5" role="main">
+        <div class="pb-2 mb-2 border-botom">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% block page_header %}{% endblock page_header %}
+        </div>
+        <div class="mb-5 pb-5">
+            {% block content %}{% endblock content %}
+        </div>
+    </main>
+    <div class="container border-top  mt-5">
+        <footer class="bg-white p-2 text-muted small">
+            <div class="row align-items-center justify-content-between">
+                <div>
+                    <span class="navbar-brand mr-2 ml-2"><strong>程序员博客</strong></span>
+                    <hr> Copyright ©
+                    <script>document.write(new Date().getFullYear())</script> . All rights reserved.
+                </div>
+                <div>
+                    by <a target="_blank" class="text-secondary font-weight-bold mr-2"
+                        href="https://linjianming.com/">随心而码</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,87 @@
+{% extends "essay/base.html" %}
+{% block page_header %}
+{% if es %}
+<div class="main-title">
+    <h4 class="post-left-title">包含关键词 {{ search }} 的内容如下：</h4>
+</div>
+{% else %}
+<div class="main-title">
+    <h4 class="post-left-title" style="text-align:center;">没有找到{{ search }}相关内容。</h4>
+    <p class="post-left-title" style="text-align:center;">请更换关键词再次搜索。</p>
+</div>
+<div class="row">
+    {% for essay in articles %}
+    <div class="col-md-3">
+        <div class="card mb-2">
+            <img src="https://cn.bing.com/th?id=OHR.RedPlanetDay_ZH-CN4913018041_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&qlt=50" alt="" class="card-img-top">
+            <div class="card-body">
+                <h5><a href="{% url 'essay:detail' essay.id %}">{{ essay.title }}</a></h5>
+                <p class="card-text">
+                   <span>作者：<a href="{% url 'essay:user_essay' essay.user.id %}">{{ essay.user.first_name }}</a></span>
+                   <span>{{ essay.content|truncatechars:20 }}</span>
+                </p>
+                <a class="btn btn-primary" href="{% url 'essay:edit_essay' essay.id %}">修改文章</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock page_header %}
+{% block content %}
+{% for e in es %}
+<div class="article-box clearfix excerpt-1">
+    <div class="col-md-4">
+        <div class="thumbnail">
+            <!-- <a href="{% url 'essay:index' %}detail-{{ e.id }}.html" title="{{ e.title }}">
+                <img src="{% url 'essay:index' %}media/{{ e.img }}" srcset="{% url 'essay:index' %}media/{{ e.img }}"
+                    alt="{{ e.title }}" class="wp-post-image" width="240" height="160" /></a> -->
+        </div>
+    </div>
+    <div class="col-md-8">
+        <h2><a href="{% url 'essay:index' %}detail-{{ e.id }}.html" target="_blank" title="{{ e.title }}">{{ e.title }}</a></h2>
+        <p class="txtcont hidden-xs"><a href="{% url 'essay:index' %}detail-{{ e.id }}.html" target="_blank"
+                title="{{ e.title }}">{{ e.content|truncatechars:50 }}</a></p>
+        <div class="meta"><span class="label label-info">分类：<a
+                    href="{% url 'essay:cate' e.cate.id %}">{{ e.cate.name }}</a></span><br/>
+            <time class="item"><i class="fa fa-clock-o"></i>{{ e.created_time|date:"Y年m月d日" }}
+            </time>
+        </div>
+    </div>
+</div><hr>
+{% endfor %}
+{% if es %}
+<nav aria-label="Search results pages">
+    <ul class="pagination justify-content-center">
+        {% if es.has_previous %}
+        <li class="page-item border border-grey" style="width:30px;text-align:center;"><a class="page-link" href="{% url 'essay:index' %}search/?search={{ search }}&page={{ es.previous_page_number }}">&laquo;</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled border border-grey" style="width:30px;text-align:center;">&laquo;</li>
+        {% endif %}
+
+
+        {% for num in es.paginator.page_range %}
+        {% if num %}
+            {% if num == es.number %}
+            <li class="page-item active border border-grey" style="width:30px;text-align:center;"><span>{{ num }}</span></li>
+            {% else %}
+            <li class="page-item border border-grey" style="width:30px;text-align:center;"><a class="page-link" href="{% url 'essay:index' %}search/?search={{ search }}&page={{ num }}">{{ num }}</a></li>
+            {% endif %}
+        {% else %}
+        <li class="page-item disabled border border-grey" style="width:30px;text-align:center;"><span>...</span></li>
+        {% endif %}
+        {% endfor %}
+
+
+        {% if es.has_next %}
+        <li class="page-item border border-grey" style="width:30px;text-align:center;"><a class="page-link" href="{% url 'essay:index' %}search/?search={{ search }}&page={{ es.next_page_number }}">&raquo;</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled border border-grey" style="width:30px;text-align:center;">&raquo;</li>
+        {% endif %}
+    </ul>
+</nav>
+{% else %}
+{% endif %}
+{% endblock content %}

@@ -1,0 +1,16 @@
+{% extends "essay/base.html" %}
+{% load bootstrap4 %}
+
+{% block content %}
+
+<form class="form" method="post" action="{% url 'users:edit_profile' user.id %}">
+    {% csrf_token %}
+    <!-- {{ form.as_p }} -->
+    {% bootstrap_form form %}
+    {% buttons %}
+    <button name="submit" class="btn btn-primary">修改</button>
+    {% endbuttons %}
+    <input type="hidden" name="next" value="{% url 'users:my_account' user.id %}" />
+</form>
+
+{% endblock content %}

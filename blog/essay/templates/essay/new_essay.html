@@ -1,0 +1,18 @@
+{% extends "essay/base.html" %}
+{% load bootstrap4 %}
+
+{% block page_header %}
+<h3>新建文章：</h3>
+{% endblock page_header %}
+
+{% block content %}
+<p>文章分类：<a href="{% url 'essay:index' %}category/{{ cate.id }}">{{cate}}</a></p>
+<form class="form" action="{% url 'essay:new_essay' cate.id %}" method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    {% buttons %}
+    <button class="btn btn-primary" name="submit">发表</button>
+    {% endbuttons %}
+</form>
+{{form.media}}
+{% endblock content %}

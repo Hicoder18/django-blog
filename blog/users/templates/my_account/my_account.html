@@ -1,0 +1,52 @@
+{% extends "essay/base.html" %}
+{% load bootstrap4 %}
+{% block page_header %}
+<p>欢迎进入你的主页，在这里你可以更改个人信息、发表的内容。</p>
+{% endblock page_header %}
+{% block content %}
+<div class="container">
+    <div class="card mb-3" style="max-width: 540px;">
+        <div class="row no-gutters">
+          <div class="col-md-4">
+            <img class="img-fluid" src="/static/essay/images/default.png" alt="...">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">你好，用户 {{user.username}}</h5>
+              <p class="card-text">网名：{{ user.first_name }}</p>
+              <p class="card-text"><small class="text-muted"><a href="{% url 'users:edit_profile' user.id %}">修改个人资料</a></small></p>
+            </div>
+          </div>
+        </div>
+    </div>
+    <hr>
+    {% if es %}
+    <strong class="h2">你的文章：<hr></strong>
+    {% endif %}
+    <div class="row">
+        {% for essay in es %}
+        <div class="col-md-3">
+            <div class="card mb-2">
+                <img src="https://cn.bing.com/th?id=OHR.RedPlanetDay_ZH-CN4913018041_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&qlt=50" alt="" class="card-img-top">
+                <div class="card-body">
+                    <h5><a href="{% url 'essay:detail' essay.id %}">{{ essay.title }}</a></h5>
+                    <p class="card-text">
+                       <span>分类：{{ essay.cate }}</span>
+                       <span>{{ essay.content|truncatechars:20 }}</span>
+                    </p>
+                    <a class="btn btn-primary" href="{% url 'essay:edit_essay' essay.id %}">修改文章</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div>
+          你还未发表文章。前往这些分类下进行发表：
+          <ul>
+          {% for cate in categories %}
+          <li><a href="{% url 'essay:new_essay' cate.id %}">{{ cate.name }}</a></li>
+          {% endfor %}</ul>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

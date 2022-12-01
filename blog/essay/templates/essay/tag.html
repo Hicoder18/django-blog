@@ -1,0 +1,19 @@
+{% extends "essay/base.html" %}
+
+{% block content %}
+
+<p>文章标签：{{tag}}</p>
+<p>该标签下包含文章：</p>
+<ul>
+    {% for essay in es %}
+    <li>
+        <h3><a href="{% url 'essay:detail' essay.id %}">{{ essay.title }}</a></h3>
+        <p><a href="{% url 'essay:user_essay' essay.user.id %}">{{ essay.user.first_name }}</a></p>
+        <hr>
+    </li>
+    {% empty %}
+    <li>啥也没有！
+    </li>
+    {% endfor %}
+</ul>
+{% endblock content %}

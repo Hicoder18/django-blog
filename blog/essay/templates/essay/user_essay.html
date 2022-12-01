@@ -1,0 +1,38 @@
+{% extends "essay/base.html" %}
+{% load bootstrap4 %}
+{% block page_header %}
+<p>欢迎进入{{user.first_name}}的主页，在这里你可以查看ta发表的内容。</p>
+{% endblock page_header %}
+{% block content %}
+<div class="container">
+    {% if es == '' %}
+    <strong class="h2">ta还未发表文章！<hr></strong>
+    {% else %}
+    <div class="row">
+        {% for essay in es %}
+        <div class="col-md-3">
+            <div class="card mb-2">
+                <img src="https://cn.bing.com/th?id=OHR.RedPlanetDay_ZH-CN4913018041_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&qlt=50" alt="" class="card-img-top">
+                <div class="card-body">
+                    <h5><a href="{% url 'essay:detail' essay.id %}">{{ essay.title }}</a></h5>
+                    <p class="card-text">
+                       <span>分类：{{ essay.cate }}</span>
+                       <span>{{ essay.content|truncatechars:20 }}</span>
+                    </p>
+                    <a class="btn btn-primary" href="{% url 'essay:detail' essay.id %}">全文阅读</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div>
+          ta还未发表文章。前往这些分类下查看所需内容：
+          <ul>
+          {% for cate in categories %}
+          <li><a href="{% url 'essay:cate' cate.id %}">{{ cate.name }}</a></li>
+          {% endfor %}</ul>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock content %}

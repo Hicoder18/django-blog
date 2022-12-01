@@ -1,0 +1,30 @@
+{% extends "essay/base.html" %}
+
+
+{% block page_header %}
+<p>文章分类：{{cate}}</p>
+<p><a href="{% url 'essay:new_essay' cate.id %}">发表新文章</a></p>
+{% endblock page_header %}
+{% block content %}
+<p>该分类下包含文章：</p>
+<div class="row">
+    {% for essay in es %}
+    <div class="col-md-3">
+        <div class="card mb-2">
+            <img src="https://cn.bing.com/th?id=OHR.RedPlanetDay_ZH-CN4913018041_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&qlt=50" alt="" class="card-img-top">
+            <div class="card-body">
+                <h5><a href="{% url 'essay:detail' essay.id %}">{{ essay.title }}</a></h5>
+                <p class="card-text">
+                   <span>作者：<a href="{% url 'essay:user_essay' essay.user.id %}">{{ essay.user.first_name }}</a></span>
+                   <span>{{ essay.content|truncatechars:20 }}</span>
+                </p>
+                <a class="btn btn-primary" href="{% url 'essay:edit_essay' essay.id %}">修改文章</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div>啥也没有！
+    </div>
+    {% endfor %}
+</div>
+{% endblock content %}
